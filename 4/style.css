@@ -1,0 +1,21 @@
+body {
+    max-width: 800px;
+    margin: auto;
+}
+.game-board {
+    table-layout: fixed;
+    width: 560px;
+    text-align: center;
+}
+th {
+    width: 80px;
+}
+td {
+    height: 80px;
+}
+.red-cell {
+    background-color: crimson;
+}
+.yellow-cell {
+    background-color: gold;
+}
