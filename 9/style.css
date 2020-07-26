@@ -1,0 +1,11 @@
+body {
+    max-width: 800px;
+    margin: auto;
+}
+p .recommend {
+    color: red;
+    font-weight: bold;
+}
+.cursor{
+    cursor: pointer;
+}
