@@ -13,22 +13,36 @@
     <!-- self style -->
     <link rel="stylesheet" href="style.css">
 
-    <title>asobi</title>
+    <title>#9：ウサギと猟犬</title>
   </head>
   <body>
-    <h1 class="my-3">asobi</h1>
-    CPUに勝てないので、ソルバを書きます。
-    <h4 class="my-3">一覧</h1>
-    <div class="list-group">
-      <a href="4/index.html" class="list-group-item list-group-item-action">#4：コネクトフォー</a>
-      <a href="9/index.html" class="list-group-item list-group-item-action">#9：ウサギと猟犬</a>
+    <h1 class="my-3">#9：ウサギと猟犬</h1>
+    <a class="btn btn-outline-info my-3" href="../index.html" role="button">トップへ</a>
+    <p>ターンプレイヤーにおすすめな手を<span class="recommend">→</span>で表示します。</p>
+    <div class="card">
+      <div class="card-header">
+        プレイヤーは
+      </div>
+      <div class="card-body">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radio1" id="radio1a" checked>
+          <label class="form-check-label" for="radio1a">猟犬</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radio1" id="radio1b">
+          <label class="form-check-label" for="radio1b">ウサギ</label>
+        </div>
+      </div>
     </div>
-
+    <button type="button" class="btn btn-danger my-3" id="resetBtn">盤面リセット</button>
+    <h4 class="my-3" id="tebanText">あなたの手番です(1/30)</h4>
+    <canvas id="canvas"></canvas>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
   </body>
 </html>
