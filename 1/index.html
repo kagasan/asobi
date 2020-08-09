@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/4043559c10.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- self style -->
+    <link rel="stylesheet" href="style.css">
+
+    <title>#1：マンカラ</title>
+  </head>
+  <body>
+    <h1 class="my-3">#1：マンカラ</h1>
+    <a class="btn btn-outline-info my-3" href="../index.html" role="button">トップへ</a>
+    <p>ターンプレイヤーにおすすめな手を<i class="far fa-smile"></i>で表示します。</p>
+    <div class="card-deck">
+      <div class="card">
+        <div class="card-header">
+          先手
+        </div>
+        <div class="card-body">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio1" id="radio1a" checked>
+            <label class="form-check-label" for="radio1a">あなた</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio1" id="radio1b">
+            <label class="form-check-label" for="radio1b">相手</label>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          読み時間
+        </div>
+        <div class="card-body">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio2" id="radio2a" checked>
+            <label class="form-check-label" for="radio2a">はやい</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio2" id="radio2b">
+            <label class="form-check-label" for="radio2b">ふつう</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio2" id="radio2c">
+            <label class="form-check-label" for="radio2c">しっかり</label>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          相手のおすすめ手
+        </div>
+        <div class="card-body">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio3" id="radio3a" checked>
+            <label class="form-check-label" for="radio3a">考えない</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio3" id="radio3b">
+            <label class="form-check-label" for="radio3b">考える</label>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          自分のおすすめ手
+        </div>
+        <div class="card-body">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio4" id="radio4a">
+            <label class="form-check-label" for="radio4a">考えない</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="radio4" id="radio4b" checked>
+            <label class="form-check-label" for="radio4b">考える</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-danger my-3" id="resetBtn">盤面リセット</button>
+    <button type="button" class="btn btn-info my-3" id="backBtn">1手戻す</button>
+    <h4 class="my-3" id="tebanText">あなたの手番です</h4>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" id="pbar"></div>
+    </div>
+    <table class="table table-bordered game-board">
+      <tbody id="cells">
+        <tr id="recommend-opo">
+          <td></td>
+          <td><i class="far fa-smile fa-2x" id="face1"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face2"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face3"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face4"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face5"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face6"></i></td>
+          <td></td>
+        </tr>
+        <tr id="put-opo">
+          <td></td>
+          <td><button type="button" class="btn btn-primary" id="put1">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put2">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put3">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put4">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put5">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put6">pick</button></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td rowspan="2" id="cell0" class="cell-opo"></td>
+          <td id="cell1" class="cell-opo"></td>
+          <td id="cell2" class="cell-opo"></td>
+          <td id="cell3" class="cell-opo"></td>
+          <td id="cell4" class="cell-opo"></td>
+          <td id="cell5" class="cell-opo"></td>
+          <td id="cell6" class="cell-opo"></td>
+          <td rowspan="2" id="cell7" class="cell-you"></td>
+        </tr>
+        <tr>
+          <td id="cell13" class="cell-you"></td>
+          <td id="cell12" class="cell-you"></td>
+          <td id="cell11" class="cell-you"></td>
+          <td id="cell10" class="cell-you"></td>
+          <td id="cell9" class="cell-you"></td>
+          <td id="cell8" class="cell-you"></td>
+        </tr>
+        <tr id="put-you">
+          <td></td>
+          <td><button type="button" class="btn btn-primary" id="put13">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put12">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put11">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put10">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put9">pick</button></td>
+          <td><button type="button" class="btn btn-primary" id="put8">pick</button></td>
+          <td></td>
+        </tr>
+        <tr id="recommend-you">
+          <td></td>
+          <td><i class="far fa-smile fa-2x" id="face13"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face12"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face11"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face10"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face9"></i></td>
+          <td><i class="far fa-smile fa-2x" id="face8"></i></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
