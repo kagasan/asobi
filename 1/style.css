@@ -1,0 +1,29 @@
+body {
+    max-width: 800px;
+    margin: auto;
+}
+.game-board {
+    table-layout: fixed;
+    width: 640px;
+    text-align: center;
+}
+th {
+    width: 80px;
+}
+td {
+    height: 80px;
+    font-size: large;
+}
+.red-cell {
+    background-color: crimson;
+}
+.yellow-cell {
+    background-color: gold;
+}
+
+.cell-opo {
+    background-color: hotpink;
+}
+.cell-you {
+    background-color: deepskyblue;
+}
