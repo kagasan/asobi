@@ -123,6 +123,76 @@ class Game {
         }
         return cnt;
     }
+
+    // 14種のputについて、評価を求めます
+    evalDfs (pl, depth = 0, limit = 100, root = null) {
+        const _self = this;
+        if (!root) root = new Game(_self);
+        const childs = [];
+        for (let i = 0; i < 14; i++) {
+            const child = [-999999];
+            if (!root.canPut(i)) {
+                childs.push(child);
+                continue;
+            }
+            const tmpNode = new Game(root);
+            tmpNode.put(i);
+            dfs(tmpNode);
+            childs.push(child);
+            function dfs(node) {
+                // 勝者確定
+                if (node.winner !== 0) {
+                    if (node.winner === pl) child.push(node.eval(pl, limit));
+                    return;
+                }
+                // プレイヤー交代
+                if (node.turnPlayer !== root.turnPlayer) {
+                    if (depth == 0) {
+                        const res = _self.evalDfs(pl, depth + 1, limit, node);
+                        let score = 0;
+                        for (let j = 0; j < res.length; j++) {
+                            if (score < res[j]) score = res[j];
+                        }
+                        child.push(score);
+                    } else if (depth == 1) {
+                        const res = _self.evalDfs(pl, depth + 1, limit, node);
+                        let score = Math.abs(res[0]);
+                        for (let j = 0; j < res.length; j++) {
+                            if (score > Math.abs(res[j])) score = res[j];
+                        }
+                        child.push(score);
+                    } else {
+                        child.push(node.eval(pl, limit));
+                    }
+                    return;
+                }
+                // プレイヤー続行
+                for (let j = 0; j < 14; j++) {
+                    if (node.canPut(j)) {
+                        const nextNode = new Game(node);
+                        nextNode.put(j);
+                        dfs(nextNode);
+                    }
+                }
+            }
+        }
+        const hoge = [];
+        for (let i = 0; i < 14; i++) {
+            let mx = childs[i][0];
+            for (let j = 0; j < childs[i].length; j++) {
+                if (depth % 2 === 0) {
+                    if (mx < childs[i][j]) mx = childs[i][j];
+                } else {
+                    if (Math.abs(mx) > Math.abs(childs[i][j])) mx = childs[i][j];
+                }
+            }
+            hoge.push(mx);
+        }
+        // console.log(depth);
+        // console.log(childs);
+        // console.log(hoge);
+        return hoge;
+    }
     makeHash() {
         const _self = this;
         let str = "" + _self.turnPlayer;
@@ -154,6 +224,7 @@ class View{
         $("#radio2a").on('click', function(){_self.evalTime = 1000;});
         $("#radio2b").on('click', function(){_self.evalTime = 3000;});
         $("#radio2c").on('click', function(){_self.evalTime = 5000;});
+        $("#radio2d").on('click', function(){_self.evalTime = 999999;});
 
         $("#radio3a").on('click', function(){_self.evalOpo = false;});
         $("#radio3b").on('click', function(){_self.evalOpo = true;});
@@ -199,14 +270,15 @@ class View{
             if (_game.board[i] === 0) continue;
             $(`#put${i}`).show();
         }
-        _game.eval();
         if (_game.winner === 0 && _game.turnPlayer === 2 && _self.evalYou) {
-            _self.eval(5000);
+            if (_self.evalTime < 9999) _self.eval();
+            else _self.eval2();
         }
         if (_game.winner === 0 && _game.turnPlayer === 1 && _self.evalOpo) {
-            _self.eval(5000);
+            if (_self.evalTime < 9999) _self.eval();
+            else _self.eval2();
         }
-        // if (_game.winner === 0) _self.eval2();
+        // console.log(_game.evalDfs(_game.turnPlayer));
     }
     reset () {
         const _self = this;
@@ -257,23 +329,26 @@ class View{
             if (_game.turnPlayer === 2) num = 14 - num;
             $("#pbar").width(`${100 * (renderStep - 1) / 6}%`);
             if (_game.canPut(num)) { 
-                function edfs (node) {
+                function dfs (node) {
                     for (let i = 0; i < 14; i++) {
                         if (!node.canPut(i)) continue;
                         const simu2 = new Game(node);
                         simu2.put(i);
                         if (simu2.winner === 0 && simu2.turnPlayer === _game.turnPlayer) {
-                            edfs(simu2);
+                            dfs(simu2);
                         } else {
                             let score = simu2.eval(_game.turnPlayer, _self.evalTime);
                             if (results[num] < score) results[num] = score;
                         }
                     }
                 }
+                function dfs2 (node) {
+                    
+                }
                 const simu = new Game(_game);
                 simu.put(num);
                 if (simu.winner === 0 && simu.turnPlayer === _game.turnPlayer) {
-                    edfs(simu);
+                    dfs(simu);
                 } else {
                     results[num] = simu.eval(_game.turnPlayer, _self.evalTime);
                 }
@@ -283,99 +358,24 @@ class View{
         $("#pbar").width(`5%`);
         window.requestAnimationFrame(render);        
     }
-    
 
-    // 木探索
+
     eval2 () {
         const _self = this;
         const _game = _self.game;
-        const results = [];
-        let map = {};
-        let dfsCnt = 0;
-        let memoCnt = 0;
-        let okFlag = false;
-        for (let i = 0; i < 14; i++) {
-            if (! _game.canPut(i)) {
-                results.push({winner:-1, turn:-1});
-                continue;
-            }
-            console.log(i);
-
-            const simu = new Game(_game);
-            simu.put(i);
-            const res = dfs(simu, simu.turn + 6);
-            results.push(res);
-            if (res.winner === _game.turnPlayer && res.turn > 0) {
-                okFlag = true;
-            }
-        }
-        for (let i = 0; i < 14 && okFlag; i++) {
-            if (results[i].winner === _game.turnPlayer && results[i].turn > 0) {
-                $(`#face${i}`).show();
-                $(`#face${i}`).html(`<br>!!`);
-            } else {
+        $("#pbar").width(`5%`);
+        window.requestAnimationFrame(function(){
+            const results = _game.evalDfs(_game.turnPlayer);
+            let mxIdx = 0;
+            for (let i = 0; i < 14; i++) {
+                if (results[mxIdx] < results[i]) {
+                    mxIdx = i;
+                }
                 $(`#face${i}`).hide();
             }
-        }
-        
-        
-        function dfs(node, limit) {
-            const key = node.makeHash();
-            if (map[key]) {
-                memoCnt++;
-                if (memoCnt % 100000 === 0) console.log("memo : ", memoCnt, node.board);
-                return map[key];
-            }
-            if (node.winner !== 0) {
-                map[key] = {winner: node.winner + 0, turn: node.turn + 0};
-                return map[key];
-            }
-            if (node.turn > limit) {
-                map[key] = {winner: -1, turn: node.turn + 0};
-                return map[key];
-            }
-            const ev = [];
-            for (let i = 0; i < 14; i++) {
-                if (i === 0 || i === 7) {
-                    ev.push({winner: -1, turn: -1});
-                    continue;
-                }
-                const next = new Game(node);
-                if (!next.canPut(i)) {
-                    ev.push({winner: -1, turn: -1});
-                    continue;
-                }
-                next.put(i);
-                ev.push(dfs(next, limit));
-            }
-            let winIdx = -1, winTurn = 9999;
-            let drawIdx = -1, drawTurn = -9999;
-            let loseIdx = -1, loseTurn = -9999;
-            for (let i = 0; i < 14; i++) {
-                if (ev[i].winner < 1 || 3 < ev[i].winner) continue;
-                if (ev[i].winner === 3) {
-                    if (ev[i].turn > drawTurn) {
-                        drawIdx = i;
-                        drawTurn = ev[i].turn + 0;
-                    }
-                    continue;
-                }
-                if (ev[i].winner === node.turnPlayer) {
-                    if (winTurn > ev[i].turn) {
-                        winIdx = i;
-                        winTurn = ev[i].turn + 0;
-                    }
-                } else {
-                    if (loseTurn < ev[i].turn) {
-                        loseIdx = i;
-                        loseTurn = ev[i].turn + 0;
-                    }
-                }
-            }
-            if (winIdx >= 0) map[key] = {winner: node.turnPlayer + 0, turn: winTurn + 0};
-            else if (drawIdx >= 0) map[key] = {winner: 3, turn: drawTurn + 0};
-            else map[key] = {winner: 3 - node.turnPlayer, turn: loseTurn + 0};
-            return map[key];
-        }
+            $(`#face${mxIdx}`).show();
+            $(`#face${mxIdx}`).html(`<br>${parseInt(results[mxIdx])}%`);
+            $("#pbar").width(`100%`);
+        });
     }
 };
