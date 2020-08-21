@@ -117,6 +117,20 @@ class Game{
                 $("#canvas").addClass("cursor");
             }
         }
+
+        const circlePosX = [200, 360, 520, 40, 200, 360, 520, 680, 200, 360, 520];
+        const circlePosY = [40, 40, 40, 200, 200, 200, 200, 200, 360, 360, 360];
+        const moveRabit = [[],
+            [1, 2, 4, 5, 6, 7, 9, 10],
+            [0, 1, 3, 4, 5, 6, 8, 9],
+        ];
+        if (_self.turnCount === 1) {
+            for (const i of moveRabit[_self.role]) {
+                if (_self.checkInnerCircle(x, y, circlePosX[i], circlePosY[i], 25)) {
+                    $("#canvas").addClass("cursor");
+                }
+            }
+        }
     }
     clickBoard(cx, cy) {
         const _self = this;
@@ -128,6 +142,23 @@ class Game{
                 _self.action(btn.from, btn.to);
                 _self.overBoard(cx, cy);
                 return;
+            }
+        }
+        const circlePosX = [200, 360, 520, 40, 200, 360, 520, 680, 200, 360, 520];
+        const circlePosY = [40, 40, 40, 200, 200, 200, 200, 200, 360, 360, 360];
+        const moveRabit = [[],
+            [1, 2, 4, 5, 6, 7, 9, 10],
+            [0, 1, 3, 4, 5, 6, 8, 9],
+        ];
+        if (_self.turnCount === 1) {
+            for (const i of moveRabit[_self.role]) {
+                if (_self.checkInnerCircle(cx, cy, circlePosX[i], circlePosY[i], 25)) {
+                    for (let j = 0; j <= 10; j++) if (_self.board[j] === 4) _self.board[j] = 0;
+                    _self.board[i] = 4;
+                    _self.changeTurnPlayer(_self.turnPlayer);
+                    _self.drawBoard();
+                    return;
+                }
             }
         }
     }
@@ -293,19 +324,35 @@ class Game{
             [0, 4, 8], [0, 3, 5, 8], [0, 1, 2, 4, 6, 8, 9, 10], [2, 5, 7, 10], [2, 6, 10],
             [3, 4, 5, 9], [5, 8, 10], [5, 6, 7, 9]
         ];
+        const moveRabit = [[],
+            [1, 2, 4, 5, 6, 7, 9, 10],
+            [0, 1, 3, 4, 5, 6, 8, 9],
+        ];
         for (let i = 0; i <= 10; i++) {
             for (let j = 0; j < path[i].length; j++) {
                 const k = path[i][j];
                 _self.drawLine(circlePosX[i], circlePosY[i], circlePosX[k], circlePosY[k], _self.rgb(50, 50, 50), 5);
             }
         }
+
         for (let i = 0; i <= 10; i++) {
             _self.drawCircle(circlePosX[i], circlePosY[i], 35, _self.rgb(50, 50, 50), -1);
             _self.drawCircle(circlePosX[i], circlePosY[i], 30, _self.rgb(255, 255, 255), -1);
             if (1 <= _self.board[i] && _self.board[i] <= 3) {
                 _self.drawCircle(circlePosX[i], circlePosY[i], 25, _self.rgb(128, 128, 128), -1);
 
-            } else if (_self.board[i] === 4) {
+            }
+        }
+
+        if (_self.turnCount === 1) {
+            for (const i of moveRabit[_self.role]) {
+                _self.drawCircle(circlePosX[i], circlePosY[i], 25, _self.rgb(200, 200, 128), -1);
+                _self.drawCircle(circlePosX[i], circlePosY[i], 18, _self.rgb(255, 255, 255), -1);    
+            }
+        }
+
+        for (let i = 0; i <= 10; i++) {
+            if (_self.board[i] === 4) {
                 _self.drawCircle(circlePosX[i], circlePosY[i], 25, _self.rgb(128, 128, 0), -1);
                 _self.drawCircle(circlePosX[i], circlePosY[i], 18, _self.rgb(255, 255, 255), 2);
             }
@@ -316,6 +363,8 @@ class Game{
             _self.drawBtn(btn.circle);    
         }
         
+
+
         // _self.calculateRecommend();
         _self.calculateRecommend2();
     }
