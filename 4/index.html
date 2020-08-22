@@ -49,20 +49,61 @@
             <label class="form-check-label" for="radio2b">黄色</label>
           </div>
         </div>
+        </div>
+          <div class="card">
+            <div class="card-header">
+              相手のおすすめ手
+            </div>
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio3" id="radio3a" checked>
+                <label class="form-check-label" for="radio3a">考えない</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio3" id="radio3b">
+                <label class="form-check-label" for="radio3b">考える</label>
+              </div>
+            </div>
+          </div>
+        <div class="card">
+          <div class="card-header">
+            思考時間
+          </div>
+          <div class="card-body">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radio4" id="radio4a" checked>
+              <label class="form-check-label" for="radio4a">ふつう</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radio4" id="radio4b">
+              <label class="form-check-label" for="radio4b">つよい</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radio4" id="radio4c">
+              <label class="form-check-label" for="radio4c">すごい</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radio4" id="radio4d">
+              <label class="form-check-label" for="radio4d">やばい</label>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
     <button type="button" class="btn btn-danger my-3" id="resetBtn">盤面リセット</button>
+    <button type="button" class="btn btn-info my-3" id="backBtn">1手戻す</button>
     <h4 class="my-3" id="tebanText">あなたの手番です</h4>
     <table class="table table-bordered game-board">
       <thead>
         <tr id="recommend">
-          <th><i class="far fa-smile fa-2x"></i></th>
-          <th><i class="far fa-smile fa-2x"></i></th>
-          <th><i class="far fa-smile fa-2x"></i></th>
-          <th><i class="far fa-smile fa-2x"></i></th>
-          <th><i class="far fa-smile fa-2x"></i></th>
-          <th><i class="far fa-smile fa-2x"></i></th>
-          <th><i class="far fa-smile fa-2x"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face1"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face2"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face3"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face4"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face5"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face6"></i></th>
+          <th><i class="far fa-smile fa-2x" id="face7"></i></th>
         </tr>
         <tr id="put">
           <th><button type="button" class="btn btn-primary" id="put1">Put</button></th>
