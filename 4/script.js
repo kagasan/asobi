@@ -11,6 +11,7 @@ class Game{
         
         _self.firstPlayer = 1;
         _self.turnPlayer = 1;
+        _self.playerColor = 1;
         _self.board = [];
         for (let i = 1; i <= 8; i++) {
             const row = [];
@@ -36,7 +37,11 @@ class Game{
         // ターンプレイヤー変更
         $("#radio1a").on('click', function(){_self.changeFirst(1);});
         $("#radio1b").on('click', function(){_self.changeFirst(2);});
-        
+
+        $("#radio2a").on('click', function(){_self.changePlayerColor(1);});
+        $("#radio2b").on('click', function(){_self.changePlayerColor(2);});
+
+
         // リセットボタン
         $("#resetBtn").on('click', function(){_self.resetGameBoard();});
 
@@ -125,9 +130,30 @@ class Game{
         const _self = this;
         const $cell = $("#cells").find("tr").eq(6 - y).find("td").eq(x - 1);
         if (_self.turnPlayer === 1) {
-            $cell.addClass("red-cell");
+            if (_self.playerColor === 1) $cell.addClass("red-cell");
+            else $cell.addClass("yellow-cell");
         } else {
-            $cell.addClass("yellow-cell");
+            if (_self.playerColor === 1) $cell.addClass("yellow-cell");
+            else $cell.addClass("red-cell");
+        }
+    }
+
+    // cellを整える
+    changePlayerColor(color) {
+        const _self = this;
+        if (_self.playerColor === color) return;
+        _self.playerColor = color;
+        for (let y = 1; y <= 6; y++) {
+            for (let x = 1; x <= 7; x++) {
+                const $cell = $("#cells").find("tr").eq(6 - y).find("td").eq(x - 1);
+                if ($cell.hasClass("red-cell")) {
+                    $cell.removeClass();
+                    $cell.addClass("yellow-cell");
+                } else if ($cell.hasClass("yellow-cell")) {
+                    $cell.removeClass();
+                    $cell.addClass("red-cell");
+                }
+            }
         }
     }
 
@@ -196,12 +222,19 @@ class Game{
                 }
                 function tmpPut(num = 0) {
                     const cols = [1, 2, 3, 4, 5, 6, 7];
-                    for (let j = 6; j > 0; j--) {
-                        const k = Math.floor( Math.random() * j);
+                    for (let step = 0; step < 100; step++) {
+                        const j = Math.floor( Math.random() * 6);
+                        const k = Math.floor( Math.random() * 6);
                         let tmp = cols[j];
                         cols[j] = cols[k];
                         cols[k] = tmp;
                     }
+                    // for (let j = 6; j > 0; j--) {
+                    //     const k = Math.floor( Math.random() * j);
+                    //     let tmp = cols[j];
+                    //     cols[j] = cols[k];
+                    //     cols[k] = tmp;
+                    // }
                     cols.push(num);
                     for (let j = 7; j >= 0; j--) {
                         if(cols[j] === 0)continue;
